@@ -1,10 +1,11 @@
 pub mod shapes {
-    use piet::Color;
 
+    use crate::random_data::{rng, rng_but_color};
+    use sdl2::pixels::Color;
     /*
         Shape Structs:::::::
     */
-    struct Square {
+    pub struct Square {
         color: Color,
         height: f32,
         width: f32,
@@ -12,7 +13,7 @@ pub mod shapes {
         y: i32,
     }
 
-    struct Triangle {
+    pub struct Triangle {
         color: Color,
         height: f32,
         width: f32,
@@ -20,14 +21,14 @@ pub mod shapes {
         y: i32,
     }
 
-    struct Circle {
+    pub struct Circle {
         color: Color,
         radius: f32,
         x: i32,
         y: i32,
     }
 
-    struct Trapaziod {
+    pub struct Trapaziod {
         color: Color,
         a: f32,
         b: f32,
@@ -92,6 +93,8 @@ pub mod shapes {
         }
     }
 }
+
+pub mod collisions {}
 
 #[cfg(test)]
 mod tests {}
