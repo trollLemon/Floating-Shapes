@@ -2,6 +2,7 @@ mod random_data;
 mod shape;
 
 mod app;
+pub mod collisions;
 use app::run;
 use std::io::Error;
 pub fn main() -> Result<(), Error> {
