@@ -69,7 +69,7 @@ pub mod shapes {
         }
 
         fn change_direction(&mut self, new_deltas: (i32, i32)) {
-            todo!()
+            self.dxdy = new_deltas;
         }
 
         fn get_location(&mut self) -> (i32, i32) {
