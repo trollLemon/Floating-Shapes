@@ -59,7 +59,7 @@ pub mod shapes {
                 color: rng_but_color(),
                 height: 100.0,
                 width: 100.0,
-                xy: rng(limits),
+                xy: rng((limits.0 - 100, limits.1 - 100)),
                 dxdy: rng_direction(delta),
             }
         }
