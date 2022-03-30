@@ -5,37 +5,38 @@ pub mod collision_handelers {
         current_dxdy: (i32, i32),
         position: (i32, i32),
         bounds: (i32, i32),
+        dimensions: (i32, i32),
     ) -> (i32, i32) {
         //top left corner collision
-        if position.0 == 0 && position.1 == 0 {
+        if position.0 <= 0 && position.1 <= 0 {
             (current_dxdy.0 * -1, current_dxdy.1 * -1)
         }
         //top right corner collision
-        else if position.0 == bounds.0 && position.1 == 0 {
+        else if position.0 >= bounds.0 - dimensions.0 && position.1 <= 0 {
             (current_dxdy.0 * -1, current_dxdy.1 * -1)
         }
         //top of the screen collision
-        else if position.0 < bounds.0 && position.1 == 0 {
+        else if position.0 < bounds.0 && position.1 <= 0 {
             (current_dxdy.0, current_dxdy.1 * -1)
         }
         //bottom left corner collision
-        else if position.0 == 0 && position.1 == bounds.1 {
+        else if position.0 <= 0 && position.1 >= bounds.1 {
             (current_dxdy.0 * -1, current_dxdy.1 * -1)
         }
         //bottom right corner collision
-        else if position.0 == bounds.0 && position.1 == bounds.1 {
+        else if position.0 >= bounds.0 - dimensions.0 && position.1 >= bounds.1 - dimensions.1 {
             (current_dxdy.0 * -1, current_dxdy.1 * -1)
         }
         //bottom collision
-        else if position.0 < bounds.0 && position.1 == bounds.1 {
+        else if position.0 < bounds.0 && position.1 >= bounds.1 - dimensions.1 {
             (current_dxdy.0, current_dxdy.1 * -1)
         }
         //right side collision
-        else if position.0 == bounds.0 && position.1 < bounds.1 {
+        else if position.0 >= bounds.0 - dimensions.0 && position.1 < bounds.1 {
             (current_dxdy.0 * -1, current_dxdy.1)
         }
         //left side collision
-        else if position.0 == 0 && position.1 < bounds.1 {
+        else if position.0 <= 0 && position.1 < bounds.1 {
             (current_dxdy.0 * -1, current_dxdy.1)
         }
         //No collision: the function should return the same dxdy since its not hitting anything
@@ -52,20 +53,22 @@ mod tests {
 
     const BOUNDS: (i32, i32) = (1000, 1000);
 
-    const POS_1: (i32, i32) = (1000, 0);
+    const W_AND_HEIGHT: (i32, i32) = (100, 100);
+
+    const POS_1: (i32, i32) = (900, 0);
     const POS_2: (i32, i32) = (0, 1000);
-    const POS_3: (i32, i32) = (1000, 1000);
+    const POS_3: (i32, i32) = (900, 900);
     const POS_4: (i32, i32) = (0, 0);
     const POS_5: (i32, i32) = (100, 500);
-    const POS_6: (i32, i32) = (1000, 500);
+    const POS_6: (i32, i32) = (900, 500);
     const POS_7: (i32, i32) = (500, 0);
-    const POS_8: (i32, i32) = (400, 1000);
+    const POS_8: (i32, i32) = (400, 900);
     const POS_9: (i32, i32) = (0, 500);
 
     #[test]
     fn no_collision() {
         let dxdy = (-6, 6);
-        let new_dxdy = collision_handeler(dxdy, POS_5, BOUNDS);
+        let new_dxdy = collision_handeler(dxdy, POS_5, BOUNDS, W_AND_HEIGHT);
         assert_eq!(new_dxdy.0, dxdy.0);
         assert_eq!(new_dxdy.1, dxdy.1);
     }
@@ -77,24 +80,24 @@ mod tests {
 
         /* collisions in the top left & right corners */
 
-        let new_dxdy = collision_handeler(right_dxdy, POS_1, BOUNDS);
+        let new_dxdy = collision_handeler(right_dxdy, POS_1, BOUNDS, W_AND_HEIGHT);
 
         assert_eq!(new_dxdy.0, -3);
         assert_eq!(new_dxdy.1, 3);
 
-        let new_dxdy = collision_handeler(left_dxdy, POS_4, BOUNDS);
+        let new_dxdy = collision_handeler(left_dxdy, POS_4, BOUNDS, W_AND_HEIGHT);
 
         assert_eq!(new_dxdy.0, 3);
         assert_eq!(new_dxdy.1, 3);
 
         /* collisions at the top of the screen, not in the corners*/
 
-        let new_dxdy = collision_handeler(right_dxdy, POS_7, BOUNDS);
+        let new_dxdy = collision_handeler(right_dxdy, POS_7, BOUNDS, W_AND_HEIGHT);
 
         assert_eq!(new_dxdy.0, 3);
         assert_eq!(new_dxdy.1, 3);
 
-        let new_dxdy = collision_handeler(left_dxdy, POS_7, BOUNDS);
+        let new_dxdy = collision_handeler(left_dxdy, POS_7, BOUNDS, W_AND_HEIGHT);
 
         assert_eq!(new_dxdy.0, -3);
         assert_eq!(new_dxdy.1, 3);
@@ -107,23 +110,23 @@ mod tests {
 
         /*collisions at the bottom of screen, not corners */
 
-        let new_dxdy = collision_handeler(right_dxdy, POS_8, BOUNDS);
+        let new_dxdy = collision_handeler(right_dxdy, POS_8, BOUNDS, W_AND_HEIGHT);
 
         assert_eq!(new_dxdy.0, 3);
         assert_eq!(new_dxdy.1, -3);
 
-        let new_dxdy = collision_handeler(left_dxdy, POS_8, BOUNDS);
+        let new_dxdy = collision_handeler(left_dxdy, POS_8, BOUNDS, W_AND_HEIGHT);
 
         assert_eq!(new_dxdy.0, -3);
         assert_eq!(new_dxdy.1, -3);
 
         /*bottom corner collisions */
 
-        let new_dxdy = collision_handeler(right_dxdy, POS_3, BOUNDS);
+        let new_dxdy = collision_handeler(right_dxdy, POS_3, BOUNDS, W_AND_HEIGHT);
         assert_eq!(new_dxdy.0, -3);
         assert_eq!(new_dxdy.1, -3);
 
-        let new_dxdy = collision_handeler(right_dxdy, POS_2, BOUNDS);
+        let new_dxdy = collision_handeler(right_dxdy, POS_2, BOUNDS, W_AND_HEIGHT);
 
         assert_eq!(new_dxdy.0, -3);
         assert_eq!(new_dxdy.1, -3);
@@ -134,11 +137,11 @@ mod tests {
         let dxdy_up = (3, -3);
         let dxdy_down = (3, 3);
 
-        let new_dxdy = collision_handeler(dxdy_up, POS_6, BOUNDS);
+        let new_dxdy = collision_handeler(dxdy_up, POS_6, BOUNDS, W_AND_HEIGHT);
         assert_eq!(new_dxdy.0, -3);
         assert_eq!(new_dxdy.1, -3);
 
-        let new_dxdy = collision_handeler(dxdy_down, POS_6, BOUNDS);
+        let new_dxdy = collision_handeler(dxdy_down, POS_6, BOUNDS, W_AND_HEIGHT);
         assert_eq!(new_dxdy.0, -3);
         assert_eq!(new_dxdy.1, 3);
     }
@@ -147,11 +150,11 @@ mod tests {
         let dxdy_up = (-3, -3);
         let dxdy_down = (-3, 3);
 
-        let new_dxdy = collision_handeler(dxdy_up, POS_9, BOUNDS);
+        let new_dxdy = collision_handeler(dxdy_up, POS_9, BOUNDS, W_AND_HEIGHT);
         assert_eq!(new_dxdy.0, 3);
         assert_eq!(new_dxdy.1, -3);
 
-        let new_dxdy = collision_handeler(dxdy_down, POS_9, BOUNDS);
+        let new_dxdy = collision_handeler(dxdy_down, POS_9, BOUNDS, W_AND_HEIGHT);
         assert_eq!(new_dxdy.0, 3);
         assert_eq!(new_dxdy.1, 3);
     }
