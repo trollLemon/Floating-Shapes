@@ -22,7 +22,7 @@ pub fn run() -> Result<(), Error> {
     let video_subsystem = sdl_context.video().unwrap();
 
     let window = video_subsystem
-        .window("Floating Shapes", 500, 500)
+        .window("Floating Shapes", 1000, 1000)
         .position_centered()
         .build()
         .unwrap();
@@ -31,7 +31,7 @@ pub fn run() -> Result<(), Error> {
 
     canvas.set_draw_color(Color::RGB(255, 255, 255));
 
-    let first_shape: shapes::Square = shapes::Square::new_shape((500, 500), (-3, 3));
+    let first_shape: shapes::Square = shapes::Square::new_shape((1000, 1000), (-5, 5));
 
     square_objects.push(first_shape);
 
@@ -66,10 +66,14 @@ pub fn run() -> Result<(), Error> {
         let curr_location = square_objects[0].get_location();
         let curr_direction = square_objects[0].get_direction();
 
+        let w = 100;
+        let h = 100;
+
         square_objects[0].change_direction(collision_handeler(
             curr_direction,
             curr_location,
-            (500, 500),
+            (1000, 1000),
+            (100, 100),
         ));
 
         square_objects[0].update_position();
