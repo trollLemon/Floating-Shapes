@@ -7,32 +7,14 @@ pub mod shapes {
     */
     pub struct Square {
         color: Color,
-        height: f32,
-        width: f32,
-        xy: (i32, i32),
-        dxdy: (i32, i32),
-    }
-
-    pub struct Triangle {
-        color: Color,
-        height: f32,
-        width: f32,
+        dimensions: (i32, i32),
         xy: (i32, i32),
         dxdy: (i32, i32),
     }
 
     pub struct Circle {
         color: Color,
-        radius: f32,
-        xy: (i32, i32),
-        dxdy: (i32, i32),
-    }
-
-    pub struct Trapaziod {
-        color: Color,
-        a: f32,
-        b: f32,
-        height: f32,
+        radius: (i32, i32),
         xy: (i32, i32),
         dxdy: (i32, i32),
     }
@@ -46,19 +28,20 @@ pub mod shapes {
     //Also requires a tupal of the desired change in x and y. This allows for the shapes to have different speeds as they are created
     //functions to change the shapes location, direction and speed are also included
     pub trait Shape {
-        fn new_shape(bounds: (i32, i32), delta: (i32, i32)) -> Self;
+        fn new_shape(bounds: (i32, i32), delta: (i32, i32), dimensions: (i32, i32)) -> Self;
         fn update_position(&mut self);
         fn change_direction(&mut self, new_deltas: (i32, i32));
+        fn get_dimensions(&mut self) -> (i32, i32);
         fn get_location(&mut self) -> (i32, i32);
         fn get_direction(&mut self) -> (i32, i32);
+        fn get_color(&mut self) -> Color;
     }
 
     impl Shape for Square {
-        fn new_shape(limits: (i32, i32), delta: (i32, i32)) -> Self {
+        fn new_shape(limits: (i32, i32), delta: (i32, i32), dimensions: (i32, i32)) -> Self {
             Self {
                 color: rng_but_color(),
-                height: 100.0,
-                width: 100.0,
+                dimensions: dimensions,
                 xy: rng((limits.0 - 100, limits.1 - 100)),
                 dxdy: rng_direction(delta),
             }
@@ -79,76 +62,50 @@ pub mod shapes {
         fn get_direction(&mut self) -> (i32, i32) {
             self.dxdy
         }
-    }
 
-    impl Shape for Triangle {
-        fn new_shape(bounds: (i32, i32), delta: (i32, i32)) -> Self {
-            todo!()
+        fn get_dimensions(&mut self) -> (i32, i32) {
+            self.dimensions
         }
 
-        fn update_position(&mut self) {
-            todo!()
-        }
-
-        fn change_direction(&mut self, new_deltas: (i32, i32)) {
-            todo!()
-        }
-
-        fn get_location(&mut self) -> (i32, i32) {
-            todo!()
-        }
-
-        fn get_direction(&mut self) -> (i32, i32) {
-            todo!()
+        fn get_color(&mut self) -> Color {
+            self.color
         }
     }
 
     impl Shape for Circle {
-        fn new_shape(bounds: (i32, i32), delta: (i32, i32)) -> Self {
-            todo!()
+        fn new_shape(limits: (i32, i32), delta: (i32, i32), dimensions: (i32, i32)) -> Self {
+            Self {
+                color: rng_but_color(),
+                radius: dimensions,
+                xy: rng((limits.0 - 100, limits.1 - 100)),
+                dxdy: rng_direction(delta),
+            }
         }
 
         fn update_position(&mut self) {
-            todo!()
+            self.xy = (self.xy.0 + self.dxdy.0, self.xy.1 + self.dxdy.1);
         }
 
         fn change_direction(&mut self, new_deltas: (i32, i32)) {
-            todo!()
+            self.dxdy = new_deltas;
         }
 
         fn get_location(&mut self) -> (i32, i32) {
-            todo!()
+            self.xy
         }
 
         fn get_direction(&mut self) -> (i32, i32) {
-            todo!()
-        }
-    }
-
-    impl Shape for Trapaziod {
-        fn new_shape(bounds: (i32, i32), delta: (i32, i32)) -> Self {
-            todo!()
+            self.dxdy
         }
 
-        fn update_position(&mut self) {
-            todo!()
+        fn get_dimensions(&mut self) -> (i32, i32) {
+            self.radius
         }
-
-        fn change_direction(&mut self, new_deltas: (i32, i32)) {
-            todo!()
-        }
-
-        fn get_location(&mut self) -> (i32, i32) {
-            todo!()
-        }
-
-        fn get_direction(&mut self) -> (i32, i32) {
-            todo!()
+        fn get_color(&mut self) -> Color {
+            self.color
         }
     }
 }
-
-pub mod collisions {}
 
 #[cfg(test)]
 mod tests {
@@ -158,7 +115,8 @@ mod tests {
 
     #[test]
     fn test_square() {
-        let mut test_thing: Square = super::shapes::Square::new_shape((1000, 1000), (-3, 3));
+        let mut test_thing: Square =
+            super::shapes::Square::new_shape((1000, 1000), (-3, 3), (100, 100));
 
         //initial coordinates, these will be used later to test if the update position code works
         let initial_x = test_thing.get_location().0;
@@ -182,5 +140,8 @@ mod tests {
         // */
         assert_eq!(test_thing.get_location().0, initial_x + dx);
         assert_eq!(test_thing.get_location().1, initial_y + dy);
+
+        assert_eq!(test_thing.get_dimensions().0, 100);
+        assert_eq!(test_thing.get_dimensions().1, 100);
     }
 }

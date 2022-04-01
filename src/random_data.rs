@@ -33,9 +33,7 @@ fn get_random_number() -> u8 {
 #[cfg(test)]
 mod tests {
 
-    use sdl2::pixels::Color;
-
-    use crate::random_data::{rng, rng_but_color, rng_direction};
+    use crate::random_data::{rng, rng_direction};
 
     #[test]
     fn test_rng() {
@@ -70,10 +68,5 @@ mod tests {
             (random_dxdy.0 <= 3 && random_dxdy.0 >= -3)
                 && (random_dxdy.1 <= 3 && random_dxdy.1 >= -3)
         );
-    }
-
-    #[test]
-    fn test_color_gen() {
-        let color: Color = rng_but_color();
     }
 }
