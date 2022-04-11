@@ -16,8 +16,8 @@ pub mod square {
         fn new_shape(limits: (i32, i32), delta: (i32, i32), dimensions: (i32, i32)) -> Self {
             Self {
                 color: rng_but_color(),
-                dimensions: dimensions,
-                xy: rng((limits.0 - 100, limits.1 - 100)),
+                dimensions,
+                xy: rng((limits.0 - dimensions.0 * 2, limits.1 - dimensions.1 * 2)),
                 dxdy: rng_direction(delta),
                 bounds: limits,
             }
