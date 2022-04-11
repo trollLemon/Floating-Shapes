@@ -244,5 +244,7 @@ fn increase_radius(radius: &mut i32) {
 }
 
 fn decrease_radius(radius: &mut i32) {
-    *radius = *radius - 1;
+    if *radius > 0 {
+        *radius = *radius - 1;
+    }
 }
