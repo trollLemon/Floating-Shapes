@@ -3,8 +3,8 @@ use sdl2::pixels::Color;
 
 pub fn rng(limits: (i32, i32)) -> (i32, i32) {
     (
-        rand::thread_rng().gen_range(0..limits.0),
-        rand::thread_rng().gen_range(0..limits.1),
+        rand::thread_rng().gen_range(100..limits.0),
+        rand::thread_rng().gen_range(100..limits.1),
     )
 }
 
